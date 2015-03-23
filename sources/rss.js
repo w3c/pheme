@@ -37,7 +37,7 @@ RSS.prototype = {
             ,   payload: {
                     title:      item.title
                 ,   summary:    item.summary
-                ,   content:    item.description
+                ,   content:    (item.description === item.summary ? null : item.description)
                 ,   link:       item.link
                 ,   tags:       item.categories
                 ,   lang:       item.meta.language
