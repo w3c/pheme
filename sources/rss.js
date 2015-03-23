@@ -29,8 +29,8 @@ RSS.prototype = {
             /* jshint -W084 */
             var item;
             while (item = this.read()) pheme.store.add({
-                time:   item.date
-            ,   id:     item.guid
+                time:   item.date.toISOString()
+            ,   id:     "rss-" + item.guid
             ,   type:   "rss"
             ,   source: rss.url
             ,   acl:    rss.acl
