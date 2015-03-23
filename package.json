@@ -5,7 +5,9 @@
   "repository": "https://github.com/darobin/pheme.git",
   "dependencies": {
     "express": "^4.12.3",
+    "feedparser": "^1.0.0",
     "nopt": "^3.0.1",
+    "request": "^2.53.0",
     "superagent": "^1.1.0"
   },
   "bin": {
