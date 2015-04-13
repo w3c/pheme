@@ -49,4 +49,3 @@ exports.method = "push";
 exports.createSource = function (conf, pheme) {
     return new GitHub(conf, pheme);
 };
-

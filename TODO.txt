@@ -4,15 +4,15 @@ General:
 
 Event Server:
     - time-based polling
-        - sources can request polling interval
+        ✓ sources can request polling interval
         - last polls are maintained for each source so that it knows what to do on start
     - ensure data dir is available
     - logging
     - configuration loading
         - needs to support sources too (e.g. all RSS sources)
     - hook endpoint
-        - sources can provide handlers
-        - they are called in turn, the first to reply wins
+        ✓ sources can provide handlers
+        ✓ they are called in turn, the first to reply wins
 
 Query Server:
     - technically the same as the event server
@@ -23,7 +23,7 @@ Query Server:
 Store:
     - needs several, at least one for file and one for whatever we use in production (Elastic?)
     - need some common fields for all events, plus a payload
-        - store time
+        - store time (added by the store itself)
         - event time
         - event ID (which needs to be reliably calculated from the data so the event server can tell
           if it already has a given event and drop it, typically for RSS)
