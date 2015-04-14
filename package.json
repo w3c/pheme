@@ -4,6 +4,7 @@
   "license": "MIT",
   "repository": "https://github.com/darobin/pheme.git",
   "dependencies": {
+    "elasticsearch": "^4.0.2",
     "express": "^4.12.3",
     "feedparser": "^1.0.0",
     "github-webhook-handler": "^0.3.4",
