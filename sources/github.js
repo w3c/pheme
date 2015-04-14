@@ -3,7 +3,9 @@ var gwh = require("github-webhook-handler");
 
 function GitHub (conf, pheme) {
     this.pheme = pheme;
-    this.name = conf.name || "GitHub";
+    // this name must be unique
+    if (!conf.name) throw(new Error("Missing field: name"));
+    this.name = conf.name;
     this.path = conf.path || "/hook";
     if (!conf.secret) throw(new Error("Missing field: secret"));
     this.handler = gwh({ path: this.path, secret: this.secret });

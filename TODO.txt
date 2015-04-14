@@ -1,16 +1,16 @@
 
 General:
-    - nodemon script
+    - nodemon script (as part of package.json)
 
 Event Server:
     - time-based polling
         ✓ sources can request polling interval
         - last polls are maintained for each source so that it knows what to do on start
-    - ensure data dir is available
-    - logging
-    - configuration loading
-        - needs to support sources too (e.g. all RSS sources)
-    - hook endpoint
+    ✓ ensure data dir is available
+    ✓ logging
+    ✓ configuration loading
+        ✓ needs to support sources too (e.g. all RSS sources)
+    ✓ hook endpoint
         ✓ sources can provide handlers
         ✓ they are called in turn, the first to reply wins
 

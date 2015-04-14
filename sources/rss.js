@@ -5,7 +5,9 @@ var FeedParser = require("feedparser")
 
 function RSS (conf, pheme) {
     this.pheme = pheme;
-    this.name = conf.name || "RSS";
+    // this name must be unique
+    if (!conf.name) throw(new Error("Missing field: name"));
+    this.name = conf.name;
     if (!conf.url) throw(new Error("Missing field: url"));
     this.url = conf.url;
     this.acl = conf.acl || "team";
