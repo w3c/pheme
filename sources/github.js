@@ -30,6 +30,10 @@ function GitHub (conf, pheme) {
         this.on(event, function (evt) {
             var acl = "public";
             if (evt.repository && evt.repository.private) acl = "team";
+            // XXX github payloads suck, we probably need to renormalise and trim a bit
+            //      especially since the denormalised bits will become WRONG over time
+            // XXX use ngrok to trigger all of the above events and dump the information so that
+            //      we can figure out how to store it well
             pheme.store.add({
                     time:       (new Date).toISOString()
                 ,   id:         "github-" + evt.id

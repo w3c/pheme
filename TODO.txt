@@ -3,9 +3,9 @@ General:
     - nodemon script (as part of package.json)
 
 Event Server:
-    - time-based polling
+    ✓ time-based polling
         ✓ sources can request polling interval
-        - last polls are maintained for each source so that it knows what to do on start
+        ✓ last polls are maintained for each source so that it knows what to do on start
     ✓ ensure data dir is available
     ✓ logging
     ✓ configuration loading
@@ -18,7 +18,18 @@ Query Server:
     - technically the same as the event server
     - needs very simple filters (event type, source) and a "since" query
     - needs to be able to support auth and filter on access level
-    - socket.io interface
+    - socket.io interface (percolations in Elastic?)
+    - needs to install itself with the server
+
+User Management:
+    - we have to know users
+    - store configuration for them
+    - we can't have ACL
+        - make a request against the W3C for login
+        - try Team, Member
+        - save Team or Member locally
+        - don't save credentials
+        - store the information we get in the session and give a cookie
 
 Store:
     - needs several, at least one for file and one for whatever we use in production (Elastic?)
