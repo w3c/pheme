@@ -8,13 +8,14 @@
     "feedparser": "^1.0.0",
     "github-webhook-handler": "^0.3.4",
     "nopt": "^3.0.1",
-    "request": "^2.53.0"
+    "request": "^2.53.0",
+    "winston": "^1.0.0"
   },
   "bin": {
     "pheme-server": "./bin/server.js"
   },
-  "main": "./lib/pheme.js"
-, "scripts": {
-    "expose":   "ngork -subdomain=pheme 3042"
+  "main": "./lib/pheme.js",
+  "scripts": {
+    "expose": "ngork -subdomain=pheme 3042"
   }
 }

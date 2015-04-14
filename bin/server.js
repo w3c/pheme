@@ -1,6 +1,5 @@
 
 var Pheme = require("../lib/pheme")
-,   port = 3042 // this is for dev purposes
 ;
 
 // parse CLI
