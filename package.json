@@ -17,7 +17,7 @@
   },
   "main": "./lib/pheme.js",
   "scripts": {
-    "expose": "ngork -subdomain=pheme 3042"
+    "expose": "ngrok http -subdomain=pheme 3042"
   , "watch":  "nodemon bin/server.js -c scratch/test-config.json"
   }
 }
