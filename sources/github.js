@@ -34,14 +34,20 @@ function GitHub (conf, pheme) {
             //      especially since the denormalised bits will become WRONG over time
             // XXX use ngrok to trigger all of the above events and dump the information so that
             //      we can figure out how to store it well
-            pheme.store.add({
-                    time:       (new Date).toISOString()
-                ,   id:         "github-" + evt.id
-                ,   type:       "github"
-                ,   source:     evt.repository ? evt.repository.full_name : evt.organization.login
-                ,   acl:        acl
-                ,   payload:    evt.payload
-            });
+            pheme.store.add(
+                    "event"
+                ,   {
+                        time:       (new Date).toISOString()
+                    ,   id:         "github-" + evt.id
+                    ,   type:       "github"
+                    ,   source:     evt.repository ? evt.repository.full_name : evt.organization.login
+                    ,   acl:        acl
+                    ,   payload:    evt.payload
+                    }
+                ,   function (err) {
+                        if (err) pheme.error(err);
+                    }
+            );
         });
     }.bind(this));
 }

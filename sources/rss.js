@@ -30,21 +30,28 @@ RSS.prototype = {
         fp.on("readable", function () {
             /* jshint -W084 */
             var item;
-            while (item = this.read()) pheme.store.add({
-                time:   item.date.toISOString()
-            ,   id:     "rss-" + item.guid
-            ,   type:   "rss"
-            ,   source: rss.url
-            ,   acl:    rss.acl
-            ,   payload: {
-                    title:      item.title
-                ,   summary:    item.summary
-                ,   content:    (item.description === item.summary ? null : item.description)
-                ,   link:       item.link
-                ,   tags:       item.categories
-                ,   lang:       item.meta.language
-                }
-            });
+            // XXX we need to check that we haven't stored that item before
+            while (item = this.read()) pheme.store.add(
+                                            "event"
+                                        ,   {
+                                                time:   item.date.toISOString()
+                                            ,   id:     "rss-" + item.guid
+                                            ,   type:   "rss"
+                                            ,   source: rss.url
+                                            ,   acl:    rss.acl
+                                            ,   payload: {
+                                                    title:      item.title
+                                                ,   summary:    item.summary
+                                                ,   content:    (item.description === item.summary ? null : item.description)
+                                                ,   link:       item.link
+                                                ,   tags:       item.categories
+                                                ,   lang:       item.meta.language
+                                                }
+                                            }
+                                        ,   function (err) {
+                                                if (err) pheme.error(err);
+                                            }
+            );
         });
     }
 };
