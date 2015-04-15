@@ -8,7 +8,7 @@ function GitHub (conf, pheme) {
     this.name = conf.name;
     this.path = conf.path || "/hook";
     if (!conf.secret) throw(new Error("Missing field: secret"));
-    this.handler = gwh({ path: this.path, secret: this.secret });
+    this.handler = gwh({ path: this.path, secret: conf.secret });
     this.handler.on("error", function (err) {
         pheme.warn(err);
     });
@@ -27,7 +27,7 @@ function GitHub (conf, pheme) {
     ,   "push"
     ,   "repository"
     ].forEach(function (event) {
-        this.on(event, function (evt) {
+        this.handler.on(event, function (evt) {
             var acl = "public";
             if (evt.repository && evt.repository.private) acl = "team";
             // XXX github payloads suck, we probably need to renormalise and trim a bit
