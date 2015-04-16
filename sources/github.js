@@ -14,6 +14,11 @@ function GitHub (conf, pheme) {
     });
     // https://developer.github.com/webhooks/
     //  note that we don't track everything
+    // XXX do we need to check 'status' for updates to the repository? or does the repository
+    //      event signal changes? this could matter for private vs pubic repos when changing
+    //      when normalising, don't store the stuff being renormalised. just keep the key. then,
+    //      if that info is needed, get it straight off GH
+    //      PRs can be closed too, depends on action (when merged they're closed, but merged: true)
     [
         "issues"
     ,   "commit_comment"
@@ -28,21 +33,55 @@ function GitHub (conf, pheme) {
     ,   "repository"
     ].forEach(function (event) {
         this.handler.on(event, function (evt) {
-            var acl = "public";
+            var acl = "public"
+            ,   payload = evt.payload
+            ;
             if (evt.repository && evt.repository.private) acl = "team";
-            // XXX github payloads suck, we probably need to renormalise and trim a bit
-            //      especially since the denormalised bits will become WRONG over time
-            // XXX use ngrok to trigger all of the above events and dump the information so that
-            //      we can figure out how to store it well
+            payload.github_event_type = event;
+
+            // simplify the payload, GitHub is very verbose
+            if (payload.sender) payload.sender = payload.sender.login;
+            if (payload.organization) payload.organization = payload.organization.login;
+            if (event === "repository") payload.repository.owner = payload.repository.owner.login;
+            else payload.repository = payload.repository.full_name;
+            if (payload.forkee) payload.forkee.owner = payload.forkee.owner.login;
+            if (payload.pull_request) {
+                payload.pull_request.user = payload.pull_request.user.login;
+                if (payload.pull_request.head) {
+                    payload.pull_request.head.user = payload.pull_request.head.user.login;
+                    payload.pull_request.head.repo = payload.pull_request.head.repo.full_name;
+                }
+                if (payload.pull_request.base) {
+                    payload.pull_request.base.user = payload.pull_request.base.user.login;
+                    payload.pull_request.base.repo = payload.pull_request.base.repo.full_name;
+                }
+            }
+            if (payload.issue) payload.issue.user = payload.issue.user.login;
+            if (payload.comment) payload.comment.user = payload.comment.user.login;
+            
+            var data = {
+                    time:       (new Date).toISOString()
+                ,   id:         "github-" + evt.id
+                ,   type:       "github"
+                ,   source:     payload.repository ? payload.repository.full_name : payload.organization.login
+                ,   acl:        acl
+                ,   payload:    payload
+            };
+            require("fs").writeFileSync(
+                require("path").join(pheme.dataDir, data.time + ".json")
+            ,   JSON.stringify(data, null, 4)
+            ,   { encoding: "utf8" }
+            );
+            // XXX EODUMP
             pheme.store.add(
                     "event"
                 ,   {
                         time:       (new Date).toISOString()
                     ,   id:         "github-" + evt.id
                     ,   type:       "github"
-                    ,   source:     evt.repository ? evt.repository.full_name : evt.organization.login
+                    ,   source:     payload.repository ? payload.repository.full_name : payload.organization.login
                     ,   acl:        acl
-                    ,   payload:    evt.payload
+                    ,   payload:    payload
                     }
                 ,   function (err) {
                         if (err) pheme.error(err);
