@@ -4,12 +4,16 @@
   "license": "MIT",
   "repository": "https://github.com/darobin/pheme.git",
   "dependencies": {
+    "body-parser": "^1.12.3",
     "elasticsearch": "^4.0.2",
     "express": "^4.12.3",
+    "express-session": "^1.11.1",
     "feedparser": "^1.0.0",
     "github-webhook-handler": "^0.3.4",
     "nopt": "^3.0.1",
     "request": "^2.53.0",
+    "session-file-store": "0.0.3",
+    "superagent": "^1.2.0",
     "winston": "^1.0.0"
   },
   "bin": {
@@ -17,7 +21,7 @@
   },
   "main": "./lib/pheme.js",
   "scripts": {
-    "expose": "ngrok http -subdomain=pheme 3042"
-  , "watch":  "nodemon bin/server.js -c scratch/test-config.json"
+    "expose": "ngrok http -subdomain=pheme 3042",
+    "watch": "nodemon bin/server.js -c scratch/test-config.json"
   }
 }
