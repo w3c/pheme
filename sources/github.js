@@ -53,6 +53,7 @@ function GitHub (conf, pheme) {
             if (payload.forkee) payload.forkee.owner = payload.forkee.owner.login;
             if (payload.pull_request) {
                 payload.pull_request.user = payload.pull_request.user.login;
+                if (payload.pull_request.assignee) payload.pull_request.assignee = payload.pull_request.assignee.login;
                 if (payload.pull_request.head) {
                     payload.pull_request.head.user = payload.pull_request.head.user.login;
                     payload.pull_request.head.repo = payload.pull_request.head.repo.full_name;
