@@ -1,6 +1,6 @@
 
 General:
-    - nodemon script (as part of package.json)
+    ✓ nodemon script (as part of package.json)
 
 Event Server:
     ✓ time-based polling

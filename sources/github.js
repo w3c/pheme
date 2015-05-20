@@ -19,6 +19,11 @@ function GitHub (conf, pheme) {
     //      when normalising, don't store the stuff being renormalised. just keep the key. then,
     //      if that info is needed, get it straight off GH
     //      PRs can be closed too, depends on action (when merged they're closed, but merged: true)
+    
+    // XXX
+    // should we add:
+    //  page_build for gh-pages building
+    //  status for things like Travis build updates
     [
         "issues"
     ,   "commit_comment"
@@ -33,6 +38,7 @@ function GitHub (conf, pheme) {
     ,   "repository"
     ].forEach(function (event) {
         this.handler.on(event, function (evt) {
+            pheme.info("received event=" + event);
             var acl = "public"
             ,   payload = evt.payload
             ;
@@ -59,26 +65,27 @@ function GitHub (conf, pheme) {
             if (payload.issue) payload.issue.user = payload.issue.user.login;
             if (payload.comment) payload.comment.user = payload.comment.user.login;
             
-            var data = {
-                    time:       (new Date).toISOString()
-                ,   id:         "github-" + evt.id
-                ,   type:       "github"
-                ,   source:     payload.repository ? payload.repository.full_name : payload.organization.login
-                ,   acl:        acl
-                ,   payload:    payload
-            };
-            require("fs").writeFileSync(
-                require("path").join(pheme.dataDir, data.time + ".json")
-            ,   JSON.stringify(data, null, 4)
-            ,   { encoding: "utf8" }
-            );
+            // var data = {
+            //         time:       (new Date).toISOString()
+            //     ,   id:         "github-" + evt.id
+            //     ,   type:       "github"
+            //     ,   source:     payload.repository ? payload.repository.full_name : payload.organization.login
+            //     ,   acl:        acl
+            //     ,   payload:    payload
+            // };
+            // require("fs").writeFileSync(
+            //     require("path").join(pheme.dataDir, data.time + ".json")
+            // ,   JSON.stringify(data, null, 4)
+            // ,   { encoding: "utf8" }
+            // );
             // XXX EODUMP
             pheme.store.add(
-                    "event"
-                ,   {
+                    {
                         time:       (new Date).toISOString()
                     ,   id:         "github-" + evt.id
-                    ,   type:       "github"
+                    ,   origin:     "github"
+                    ,   type:       "event"
+                    ,   event:      event
                     ,   source:     payload.repository ? payload.repository.full_name : payload.organization.login
                     ,   acl:        acl
                     ,   payload:    payload

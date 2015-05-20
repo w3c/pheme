@@ -32,11 +32,12 @@ RSS.prototype = {
             var item;
             while (item = this.read()) {
                 pheme.store.addUnlessExists(
-                        "event"
-                    ,   {
+                        {
                             time:   item.date.toISOString()
                         ,   id:     "rss-" + item.guid
-                        ,   type:   "rss"
+                        ,   origin: rss.name
+                        ,   type:   "event"
+                        ,   event:  "rss"
                         ,   source: rss.url
                         ,   acl:    rss.acl
                         ,   payload: {
