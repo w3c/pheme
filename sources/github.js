@@ -64,6 +64,7 @@ function GitHub (conf, pheme) {
             }
             if (payload.issue) payload.issue.user = payload.issue.user.login;
             if (payload.comment) payload.comment.user = payload.comment.user.login;
+            if (event === "issue_comment") payload.issue = payload.issue.number;
             
             // var data = {
             //         time:       (new Date).toISOString()
