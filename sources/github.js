@@ -23,7 +23,8 @@ function GitHub (conf, pheme) {
     // XXX
     // should we add:
     //  page_build for gh-pages building
-    //  status for things like Travis build updates
+    //  status for things like Travis build updates (https://developer.github.com/v3/repos/statuses/)
+    var handledEvents = {};
     [
         "issues"
     ,   "commit_comment"
@@ -36,54 +37,56 @@ function GitHub (conf, pheme) {
     ,   "pull_request"
     ,   "push"
     ,   "repository"
-    ].forEach(function (event) {
-        this.handler.on(event, function (evt) {
-            pheme.info("received event=" + event);
-            var acl = "public"
-            ,   payload = evt.payload
-            ;
-            if (evt.repository && evt.repository.private) acl = "team";
-            payload.github_event_type = event;
+    ].forEach(function (e) {
+        handledEvents[e] = true;
+    });
+    this.handler.on("*", function (evt) {
+        if (!handledEvents[evt.event]) return pheme.info("Ignoring GH event " + evt.event);
+        pheme.info("Processing GH event " + evt.event);
+        var acl = "public"
+        ,   payload = evt.payload
+        ;
+        if (evt.repository && evt.repository.private) acl = "team";
+        payload.github_event_type = evt.event;
 
-            // simplify the payload, GitHub is very verbose
-            if (payload.sender) payload.sender = payload.sender.login;
-            if (payload.organization) payload.organization = payload.organization.login;
-            if (event === "repository") payload.repository.owner = payload.repository.owner.login;
-            else payload.repository = payload.repository.full_name;
-            if (payload.forkee) payload.forkee.owner = payload.forkee.owner.login;
-            if (payload.pull_request) {
-                payload.pull_request.user = payload.pull_request.user.login;
-                if (payload.pull_request.assignee) payload.pull_request.assignee = payload.pull_request.assignee.login;
-                if (payload.pull_request.head) {
-                    payload.pull_request.head.user = payload.pull_request.head.user.login;
-                    payload.pull_request.head.repo = payload.pull_request.head.repo.full_name;
-                }
-                if (payload.pull_request.base) {
-                    payload.pull_request.base.user = payload.pull_request.base.user.login;
-                    payload.pull_request.base.repo = payload.pull_request.base.repo.full_name;
-                }
+        // simplify the payload, GitHub is very verbose
+        if (payload.sender) payload.sender = payload.sender.login;
+        if (payload.organization) payload.organization = payload.organization.login;
+        if (evt.event === "repository") payload.repository.owner = payload.repository.owner.login;
+        else payload.repository = payload.repository.full_name;
+        if (payload.forkee) payload.forkee.owner = payload.forkee.owner.login;
+        if (payload.pull_request) {
+            payload.pull_request.user = payload.pull_request.user.login;
+            if (payload.pull_request.assignee) payload.pull_request.assignee = payload.pull_request.assignee.login;
+            if (payload.pull_request.head) {
+                payload.pull_request.head.user = payload.pull_request.head.user.login;
+                payload.pull_request.head.repo = payload.pull_request.head.repo.full_name;
             }
-            if (payload.issue) payload.issue.user = payload.issue.user.login;
-            if (payload.comment) payload.comment.user = payload.comment.user.login;
-            if (event === "issue_comment") payload.issue = payload.issue.number;
-            
-            pheme.store.add(
-                    {
-                        time:       (new Date).toISOString()
-                    ,   id:         "github-" + evt.id
-                    ,   origin:     "github"
-                    ,   type:       "event"
-                    ,   event:      event
-                    ,   source:     payload.repository ? payload.repository.full_name : payload.organization.login
-                    ,   acl:        acl
-                    ,   payload:    payload
-                    }
-                ,   function (err) {
-                        if (err) pheme.error(err);
-                    }
-            );
-        });
-    }.bind(this));
+            if (payload.pull_request.base) {
+                payload.pull_request.base.user = payload.pull_request.base.user.login;
+                payload.pull_request.base.repo = payload.pull_request.base.repo.full_name;
+            }
+        }
+        if (payload.issue) payload.issue.user = payload.issue.user.login;
+        if (payload.comment) payload.comment.user = payload.comment.user.login;
+        if (evt.event === "issue_comment") payload.issue = payload.issue.number;
+        
+        pheme.store.add(
+                {
+                    time:       (new Date).toISOString()
+                ,   id:         "github-" + evt.id
+                ,   origin:     "github"
+                ,   type:       "event"
+                ,   event:      evt.event
+                ,   source:     payload.repository ? payload.repository.full_name : payload.organization.login
+                ,   acl:        acl
+                ,   payload:    payload
+                }
+            ,   function (err) {
+                    if (err) pheme.error(err);
+                }
+        );
+    });
 }
 GitHub.prototype = {
     handle: function (req, res, next) {
