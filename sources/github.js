@@ -67,20 +67,6 @@ function GitHub (conf, pheme) {
             if (payload.comment) payload.comment.user = payload.comment.user.login;
             if (event === "issue_comment") payload.issue = payload.issue.number;
             
-            // var data = {
-            //         time:       (new Date).toISOString()
-            //     ,   id:         "github-" + evt.id
-            //     ,   type:       "github"
-            //     ,   source:     payload.repository ? payload.repository.full_name : payload.organization.login
-            //     ,   acl:        acl
-            //     ,   payload:    payload
-            // };
-            // require("fs").writeFileSync(
-            //     require("path").join(pheme.dataDir, data.time + ".json")
-            // ,   JSON.stringify(data, null, 4)
-            // ,   { encoding: "utf8" }
-            // );
-            // XXX EODUMP
             pheme.store.add(
                     {
                         time:       (new Date).toISOString()
