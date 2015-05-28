@@ -1,5 +1,7 @@
 
-var gwh = require("github-webhook-handler");
+var gwh = require("github-webhook-handler")
+,   ghs = require("github-hook-simplify")
+;
 
 function GitHub (conf, pheme) {
     this.pheme = pheme;
@@ -50,26 +52,7 @@ function GitHub (conf, pheme) {
         payload.github_event_type = evt.event;
 
         // simplify the payload, GitHub is very verbose
-        if (payload.sender) payload.sender = payload.sender.login;
-        if (payload.organization) payload.organization = payload.organization.login;
-        if (evt.event === "repository") payload.repository.owner = payload.repository.owner.login;
-        else payload.repository = payload.repository.full_name;
-        if (payload.forkee) payload.forkee.owner = payload.forkee.owner.login;
-        if (payload.pull_request) {
-            payload.pull_request.user = payload.pull_request.user.login;
-            if (payload.pull_request.assignee) payload.pull_request.assignee = payload.pull_request.assignee.login;
-            if (payload.pull_request.head) {
-                payload.pull_request.head.user = payload.pull_request.head.user.login;
-                payload.pull_request.head.repo = payload.pull_request.head.repo.full_name;
-            }
-            if (payload.pull_request.base) {
-                payload.pull_request.base.user = payload.pull_request.base.user.login;
-                payload.pull_request.base.repo = payload.pull_request.base.repo.full_name;
-            }
-        }
-        if (payload.issue) payload.issue.user = payload.issue.user.login;
-        if (payload.comment) payload.comment.user = payload.comment.user.login;
-        if (evt.event === "issue_comment") payload.issue = payload.issue.number;
+        ghs(evt.event, payload);
         
         pheme.store.add(
                 {
