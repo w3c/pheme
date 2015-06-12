@@ -1,7 +1,7 @@
 
 TODO:
-    ✓ deploy to labs machine
-    ✓ hatchery logo
+    - switch to a ZMQ architecture
+    - split services into smaller pieces that all talk together
 
 
 General:
