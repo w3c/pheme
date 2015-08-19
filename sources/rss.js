@@ -26,6 +26,11 @@ RSS.prototype = {
             this.pipe(fp);
         });
 
+        // I suspect leakage
+        fp.on("end", function () {
+            fp = null;
+            req = null;
+        });
         fp.on("error", function (err) { pheme.warn(err); });
         fp.on("readable", function () {
             /* jshint -W084 */
