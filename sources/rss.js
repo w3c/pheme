@@ -1,6 +1,7 @@
 
 var FeedParser = require("feedparser")
 ,   request = require("request")
+,   log = require("../lib/log")
 ;
 
 function RSS (conf, pheme) {
@@ -20,9 +21,9 @@ RSS.prototype = {
         ,   rss = this
         ;
 
-        req.on("error", function (err) { pheme.warn(err); });
+        req.on("error", function (err) { log.warn(err); });
         req.on("response", function (res) {
-            if (res.statusCode !== 200) return pheme.warn("RSS response status code for " + this.url + ": " + res.statusCode);
+            if (res.statusCode !== 200) return log.warn("RSS response status code for " + this.url + ": " + res.statusCode);
             this.pipe(fp);
         });
 
@@ -31,7 +32,7 @@ RSS.prototype = {
             fp = null;
             req = null;
         });
-        fp.on("error", function (err) { pheme.warn(err); });
+        fp.on("error", function (err) { log.warn(err); });
         fp.on("readable", function () {
             /* jshint -W084 */
             var item;
@@ -55,7 +56,7 @@ RSS.prototype = {
                             }
                         }
                     ,   function (err) {
-                            if (err) pheme.error(err);
+                            if (err) log.error(err);
                         }
                 );
             }

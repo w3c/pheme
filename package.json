@@ -1,6 +1,6 @@
 {
   "name": "pheme",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "license": "MIT",
   "repository": "https://github.com/darobin/pheme.git",
   "dependencies": {
@@ -16,7 +16,6 @@
     "github-webhook-handler": "^0.4.0",
     "nopt": "^3.0.2",
     "request": "^2.55.0",
-    "rethinkdb": "^2.0.0",
     "session-file-store": "0.0.11",
     "superagent": "^1.2.0",
     "winston": "^1.0.0"
@@ -27,6 +26,6 @@
   "main": "./lib/pheme.js",
   "scripts": {
     "expose": "ngrok http -subdomain=pheme 3042",
-    "watch": "nodemon bin/server.js -c scratch/test-config.json"
+    "watch": "nodemon bin/server.js"
   }
 }

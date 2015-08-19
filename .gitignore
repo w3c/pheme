@@ -30,3 +30,4 @@ node_modules
 # Stuff I'm just using locally
 scratch
 data
+config.json

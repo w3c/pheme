@@ -1,6 +1,7 @@
 
 var gwh = require("github-webhook-handler")
 ,   ghs = require("github-hook-simplify")
+,   log = require("../lib/log")
 ;
 
 function GitHub (conf, pheme) {
@@ -12,7 +13,7 @@ function GitHub (conf, pheme) {
     if (!conf.secret) throw(new Error("Missing field: secret"));
     this.handler = gwh({ path: this.path, secret: conf.secret });
     this.handler.on("error", function (err) {
-        pheme.warn(err);
+        log.warn(err);
     });
     // https://developer.github.com/webhooks/
     //  note that we don't track everything
@@ -43,8 +44,8 @@ function GitHub (conf, pheme) {
         handledEvents[e] = true;
     });
     this.handler.on("*", function (evt) {
-        if (!handledEvents[evt.event]) return pheme.info("Ignoring GH event " + evt.event);
-        pheme.info("Processing GH event " + evt.event);
+        if (!handledEvents[evt.event]) return log.info("Ignoring GH event " + evt.event);
+        log.info("Processing GH event " + evt.event);
         var acl = "public"
         ,   payload = evt.payload
         ;
@@ -66,7 +67,7 @@ function GitHub (conf, pheme) {
                 ,   payload:    payload
                 }
             ,   function (err) {
-                    if (err) pheme.error(err);
+                    if (err) log.error(err);
                 }
         );
     });
