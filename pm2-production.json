@@ -1,7 +1,7 @@
 {
     "name":         "pheme"
 ,   "script":       "./bin/server.js"
-,   "args":         ["-c", "/home/ubuntu/lab/config-pheme.json"]
+,   "args":         []
 ,   "exec_mode":    "fork"
 ,   "instances":    1
 ,   "out_file":     "/home/ubuntu/lab/pheme-pm2.log"

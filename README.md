@@ -1,4 +1,4 @@
-# pheme
+# Pheme
 
 Pheme (FAY-may) is a daemon that provides the following services:
 
@@ -17,5 +17,12 @@ that the stream can be unified and then queried. Consumers of Pheme's stream cou
 application exposing what is going on around a given project, or an emailing service that would
 notify people of certain specific events.
 
+Currently Pheme can be at the receiving end of GitHub hooks (several if need be, including having a
+separate secret for each) and can poll for arbitrary RSS/Atom content. Adding support for more
+types of content should be straightforward.
 
+There is a dashboard application that uses Pheme called [Midgard](https://github.com/w3c/midgard).
 
+Since Pheme and Midgard work together, I have written up development/deployment documentation that
+covers both, available in the [`DEVELOPMENT.md` 
+document](https://github.com/w3c/midgard/blob/master/DEVELOPMENT.md) there.
