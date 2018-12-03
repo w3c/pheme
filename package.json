@@ -17,7 +17,7 @@
     "nopt": "4.0.1",
     "request": "2.88.0",
     "session-file-store": "1.2.0",
-    "superagent": "1.2.0",
+    "superagent": "3.7.0",
     "winston": "3.1.0"
   },
   "bin": {
