@@ -4,7 +4,7 @@
   "license": "MIT",
   "repository": "https://github.com/w3c/pheme.git",
   "dependencies": {
-    "async": "2.6.1",
+    "async": "2.6.4",
     "body-parser": "1.18.3",
     "cors": "2.8.5",
     "cradle": "0.7.1",
