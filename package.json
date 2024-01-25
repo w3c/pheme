@@ -10,7 +10,7 @@
     "cradle": "0.7.1",
     "express": "4.16.4",
     "express-session": "1.15.6",
-    "express-winston": "3.0.1",
+    "express-winston": "^0.4.1",
     "feedparser": "2.2.9",
     "github-hook-simplify": "0.1.0",
     "github-webhook-handler": "0.7.1",
